@@ -56,8 +56,6 @@ cat ~/.nebius/config.yaml
 
 ```bash
 export AUTH_TOKEN=$(openssl rand -hex 32)
-SUBNET_ID=$(nebius vpc subnet get-by-name --name default-subnet \
-  --format jsonpath='{.metadata.id}')
 
 nebius ai endpoint create \
   --name qs-endpoint-nginx \
@@ -67,8 +65,7 @@ nebius ai endpoint create \
   --public \
   --container-port 80 \
   --auth token \
-  --token "$AUTH_TOKEN" \
-  --subnet-id "$SUBNET_ID"
+  --token "$AUTH_TOKEN"
 
 export ENDPOINT_ID=$(nebius ai endpoint get-by-name \
   --name qs-endpoint-nginx --format jsonpath='{.metadata.id}')
