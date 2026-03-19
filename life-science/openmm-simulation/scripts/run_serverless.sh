@@ -30,10 +30,10 @@ done
 
 PROTEIN_ID=${POSITIONAL_ARGS[0]:-"1UBQ"}
 STEPS=${POSITIONAL_ARGS[1]:-"1000"}
-IMAGE_TAG=${IMAGE_TAG:-"latest"}
+DEFAULT_IMAGE="mnrozhkov/openmm-serverless:v0.1.3"
+IMAGE_TAG=${IMAGE_TAG:-"v0.1.3"}
 IMAGE=${IMAGE:-""}
 CONTAINER_REGISTRY_PATH=${CONTAINER_REGISTRY_PATH:-""}
-NB_CONTAINER_REGISTRY_PATH=${NB_CONTAINER_REGISTRY_PATH:-""}
 JOB_PLATFORM=${JOB_PLATFORM:-"gpu-l40s-a"}
 JOB_PRESET=${JOB_PRESET:-"1gpu-8vcpu-32gb"}
 JOB_TIMEOUT=${JOB_TIMEOUT:-"4h"}
@@ -58,14 +58,6 @@ required_vars=(
 )
 
 missing_vars=()
-if [ -z "$IMAGE" ]; then
-    if [ -z "$CONTAINER_REGISTRY_PATH" ] && [ -n "$NB_CONTAINER_REGISTRY_PATH" ]; then
-        # Backward compatibility with older env name.
-        CONTAINER_REGISTRY_PATH="$NB_CONTAINER_REGISTRY_PATH"
-        echo "ℹ️  Using NB_CONTAINER_REGISTRY_PATH as CONTAINER_REGISTRY_PATH"
-    fi
-    required_vars=("${required_vars[@]}" "CONTAINER_REGISTRY_PATH")
-fi
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
@@ -89,13 +81,12 @@ if [ ${#missing_vars[@]} -gt 0 ]; then
     fi
 fi
 
-if [ -z "$IMAGE" ] && [ -z "$CONTAINER_REGISTRY_PATH" ]; then
-    echo "IMAGE is not set and CONTAINER_REGISTRY_PATH is empty. Set IMAGE or CONTAINER_REGISTRY_PATH." >&2
-    exit 1
-fi
-
 if [ -z "$IMAGE" ]; then
-    IMAGE="${CONTAINER_REGISTRY_PATH}/openmm-serverless:${IMAGE_TAG}"
+    if [ -n "$CONTAINER_REGISTRY_PATH" ]; then
+        IMAGE="${CONTAINER_REGISTRY_PATH}/openmm-serverless:${IMAGE_TAG}"
+    else
+        IMAGE="$DEFAULT_IMAGE"
+    fi
 fi
 echo "Using image: $IMAGE"
 PROTEIN_ID_LOWER="$(printf '%s' "$PROTEIN_ID" | tr '[:upper:]' '[:lower:]')"

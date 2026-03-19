@@ -31,6 +31,7 @@ COPY pyproject.toml .
 COPY uv.lock .
 COPY README.md .
 COPY sim/ ./sim/
+COPY assets/ ./assets/
 
 # Create Python virtual environment (3.12 for broad compatibility with scientific packages)
 RUN uv python install 3.12 && uv venv /opt/venv --python 3.12
