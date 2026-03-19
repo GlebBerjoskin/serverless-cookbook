@@ -37,7 +37,18 @@ done
 
 PROTEIN_ID=${POSITIONAL_ARGS[0]:-"1UBQ"}
 STEPS=${POSITIONAL_ARGS[1]:-"100"}
-IMAGE=${IMAGE:-"mnrozhkov/openmm-serverless:v0.1.0"}
+DEFAULT_IMAGE="mnrozhkov/openmm-serverless:v0.1.3"
+IMAGE_TAG=${IMAGE_TAG:-"v0.1.3"}
+CONTAINER_REGISTRY_PATH=${CONTAINER_REGISTRY_PATH:-""}
+
+if [ -z "${IMAGE:-}" ]; then
+    if [ -n "$CONTAINER_REGISTRY_PATH" ]; then
+        IMAGE="${CONTAINER_REGISTRY_PATH}/openmm-serverless:${IMAGE_TAG}"
+    else
+        IMAGE="$DEFAULT_IMAGE"
+    fi
+fi
+
 
 echo "Running OpenMM simulation for protein $PROTEIN_ID with $STEPS steps"
 if [ "$DEBUG_MODE" = true ]; then

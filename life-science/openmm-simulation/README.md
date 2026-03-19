@@ -95,7 +95,7 @@ The local smoke test is only for validating setup. The **Serverless job path** i
 This tutorial uses a pre-built container image:
 
 ```bash
-docker run --rm mnrozhkov/openmm-serverless:v0.1.1 --protein-id 1UBQ --steps 200
+docker run --rm mnrozhkov/openmm-serverless:v0.1.3 --protein-id 1UBQ --steps 200
 ```
 
 This image contains the OpenMM runtime and the example code used throughout the guide.
@@ -134,7 +134,7 @@ Start with a minimal job run:
 ```bash
 nebius ai job create \
   --name "quick-serverless-openmm" \
-  --image "mnrozhkov/openmm-serverless:v0.1.1" \
+  --image "mnrozhkov/openmm-serverless:v0.1.3" \
   --platform "gpu-l40s-a" \
   --preset "1gpu-8vcpu-32gb" \
   --timeout "1h" \
@@ -214,7 +214,7 @@ docker run --rm \
   -e S3_BUCKET="$S3_BUCKET" \
   -e S3_PREFIX="$S3_PREFIX" \
   -e S3_ENDPOINT_URL="$S3_ENDPOINT_URL" \
-  "mnrozhkov/openmm-serverless:v0.1.1" --protein-id 1UBQ --steps 200
+  "mnrozhkov/openmm-serverless:v0.1.3" --protein-id 1UBQ --steps 200
 ```
 
 This is a faster way to validate:
@@ -232,7 +232,7 @@ Once Docker + S3 works, run the full Serverless job:
 ```bash
 nebius ai job create \
   --name "openmm-persistent-1ubq" \
-  --image "mnrozhkov/openmm-serverless:v0.1.1" \
+  --image "mnrozhkov/openmm-serverless:v0.1.3" \
   --platform "gpu-l40s-a" \
   --preset "1gpu-8vcpu-32gb" \
   --timeout "4h" \
@@ -307,7 +307,7 @@ Examples:
 ```bash
 nebius ai job create \
   --name "openmm-2ptc-2000" \
-  --image "mnrozhkov/openmm-serverless:v0.1.1" \
+  --image "mnrozhkov/openmm-serverless:v0.1.3" \
   --platform "gpu-l40s-a" \
   --preset "1gpu-8vcpu-32gb" \
   --timeout "4h" \
